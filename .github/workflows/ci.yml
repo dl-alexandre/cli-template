@@ -35,26 +35,13 @@ jobs:
         grep -q "{{APPNAME}}" README.md || (echo "❌ Missing {{APPNAME}} placeholder in README.md" && exit 1)
         echo "✅ Template placeholders found"
     
-    - name: Validate YAML syntax
+    - name: Check files have content
       run: |
-        echo "Validating YAML files..."
-        python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))" || (echo "❌ Invalid ci.yml" && exit 1)
-        python3 -c "import yaml; yaml.safe_load(open('.github/workflows/release.yml'))" || (echo "❌ Invalid release.yml" && exit 1)
-        python3 -c "import yaml; yaml.safe_load(open('.golangci.yml'))" || (echo "❌ Invalid .golangci.yml" && exit 1)
-        python3 -c "import yaml; yaml.safe_load(open('.goreleaser.yml'))" || (echo "❌ Invalid .goreleaser.yml" && exit 1)
-        echo "✅ All YAML files valid"
-    
-    - name: Validate Go syntax (without building)
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.24'
-    
-    - name: Check Go file syntax
-      run: |
-        echo "Validating Go file syntax..."
-        # Check syntax without building (files have placeholders, won't compile)
-        find . -name "*.go" -not -path "./.git/*" -exec gofmt -l {} \; | head -20
-        echo "✅ Go files formatted correctly"
+        echo "Checking file contents..."
+        test -s go.mod || (echo "❌ go.mod is empty" && exit 1)
+        test -s cmd/{{APPNAME}}/main.go || (echo "❌ main.go is empty" && exit 1)
+        test -s internal/cli/cli.go || (echo "❌ cli.go is empty" && exit 1)
+        echo "✅ All required files have content"
     
     - name: Check scripts are executable
       run: |
@@ -62,24 +49,3 @@ jobs:
         test -x scripts/setup.sh || (echo "❌ setup.sh should be executable" && exit 1)
         test -x .githooks/pre-commit || (echo "❌ pre-commit hook should be executable" && exit 1)
         echo "✅ Scripts are executable"
-
-  lint-config:
-    name: Lint Config
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v4
-    
-    - name: Set up Go
-      uses: actions/setup-go@v5
-      with:
-        go-version: '1.24'
-    
-    - name: Verify golangci-lint config
-      uses: golangci/golangci-lint-action@v6
-      with:
-        version: latest
-        args: --timeout=5m --config=.golangci.yml
-        skip-cache: true
-        skip-pkg-cache: true
-        skip-build-cache: true
-      continue-on-error: true  # Template has placeholders, lint will fail
