@@ -1,0 +1,180 @@
+# GoReleaser configuration
+# Documentation: https://goreleaser.com
+
+version: 2
+
+project_name: {{APPNAME}}
+
+before:
+  hooks:
+    # Tidy and verify dependencies
+    - go mod tidy
+    - go mod verify
+    # Run tests to ensure quality before release
+    - go test ./...
+
+builds:
+  - id: {{APPNAME}}
+    main: ./cmd/{{APPNAME}}
+    binary: {{APPNAME}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    goarm:
+      - "7"
+    ignore:
+      # Skip 32-bit builds
+      - goos: windows
+        goarch: arm
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.gitCommit={{.Commit}}
+      - -X main.buildTime={{.Date}}
+    flags:
+      - -trimpath
+
+archives:
+  - id: {{APPNAME}}
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+      - completions/*
+    wrap_in_directory: true
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+      - Merge pull request
+      - Merge branch
+  groups:
+    - title: Features
+      regexp: "^.*feat[/(].*"
+      order: 0
+    - title: Bug Fixes
+      regexp: "^.*fix[/(].*"
+      order: 1
+    - title: Improvements
+      regexp: "^.*improve[/(].*"
+      order: 2
+    - title: Documentation
+      regexp: "^.*docs[/(].*"
+      order: 3
+    - title: Other
+      order: 999
+
+release:
+  github:
+    owner: {{OWNER}}
+    name: {{REPO_NAME}}
+  draft: false
+  prerelease: auto
+  name_template: "v{{.Version}}"
+  header: |
+    ## {{APPNAME}} v{{.Version}}
+    
+    Full Changelog: https://github.com/{{OWNER}}/{{REPO_NAME}}/compare/{{.PreviousTag}}...v{{.Version}}
+  footer: |
+    ## Installation
+    
+    ### macOS/Linux (Homebrew)
+    ```bash
+    brew tap {{OWNER}}/{{APPNAME}}
+    brew install {{APPNAME}}
+    ```
+    
+    ### Binary Download
+    Download the appropriate binary for your platform from the assets below.
+    
+    ### Verification
+    Verify checksums:
+    ```bash
+    sha256sum -c checksums.txt
+    ```
+
+# Homebrew tap configuration (uncomment and customize)
+# brews:
+#   - name: {{APPNAME}}
+#     repository:
+#       owner: {{OWNER}}
+#       name: homebrew-tap
+#       token: "{{ .Env.GITHUB_TOKEN }}"
+#     commit_author:
+#       name: goreleaserbot
+#       email: goreleaser@carlosbecker.com
+#     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+#     directory: Formula
+#     description: "{{DESCRIPTION}}"
+#     homepage: "https://github.com/{{OWNER}}/{{REPO_NAME}}"
+#     license: "MIT"
+#     test: |
+#       system "#{bin}/{{APPNAME}}", "version"
+#     install: |
+#       bin.install "{{APPNAME}}"
+
+# Scoop configuration for Windows (uncomment and customize)
+# scoops:
+#   - repository:
+#       owner: {{OWNER}}
+#       name: scoop-bucket
+#       token: "{{ .Env.GITHUB_TOKEN }}"
+#     commit_author:
+#       name: goreleaserbot
+#       email: goreleaser@carlosbecker.com
+#     commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+#     description: "{{DESCRIPTION}}"
+#     homepage: "https://github.com/{{OWNER}}/{{REPO_NAME}}"
+#     license: MIT
+#     persist:
+#       - "config.yaml"
+
+# Docker configuration (optional - uncomment when ready)
+# dockers:
+#   - image_templates:
+#       - "ghcr.io/{{OWNER}}/{{APPNAME}}:{{ .Tag }}"
+#       - "ghcr.io/{{OWNER}}/{{APPNAME}}:v{{ .Major }}"
+#       - "ghcr.io/{{OWNER}}/{{APPNAME}}:v{{ .Major }}.{{ .Minor }}"
+#       - "ghcr.io/{{OWNER}}/{{APPNAME}}:latest"
+#     dockerfile: Dockerfile
+#     build_flag_templates:
+#       - "--pull"
+#       - "--label=org.opencontainers.image.created={{.Date}}"
+#       - "--label=org.opencontainers.image.title={{.ProjectName}}"
+#       - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+#       - "--label=org.opencontainers.image.version={{.Version}}"
+
+# Goreleaser Pro features (optional)
+# announce:
+#   twitter:
+#     enabled: true
+#     message_template: "{{APPNAME}} {{.Tag}} is out! Check it out: https://github.com/{{OWNER}}/{{REPO_NAME}}/releases/{{.Tag}}"
