@@ -47,8 +47,26 @@ if [[ ! $confirm =~ ^[Yy]$ ]]; then
     exit 1
 fi
 
-# Uppercase version for env var prefix
-appname_upper=$(echo "$appname" | tr '[:lower:]' '[:upper:]')
+# Check if this is a git clone of the template (not "Use this template")
+if [ -d ".git" ]; then
+    echo -e "${YELLOW}⚠️  Template git history detected!${NC}"
+    echo ""
+    echo "You appear to have cloned the template repository."
+    echo "To start fresh without the template's commit history:"
+    echo ""
+    echo -e "  ${GREEN}rm -rf .git && git init${NC}"
+    echo ""
+    read -p "Remove template git history now? (recommended) (Y/n): " remove_git
+    remove_git=${remove_git:-Y}
+    if [[ $remove_git =~ ^[Yy]$ ]]; then
+        rm -rf .git
+        git init
+        echo -e "${GREEN}✅ Git history reset. Fresh repository initialized.${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Keeping template git history. You may want to remove .git manually.${NC}"
+    fi
+    echo ""
+fi
 
 echo ""
 echo -e "${YELLOW}Replacing placeholders...${NC}"
@@ -93,13 +111,20 @@ echo ""
 echo -e "${GREEN}Setup complete!${NC}"
 echo ""
 echo -e "${YELLOW}Next steps:${NC}"
-echo "  1. Initialize git repository: git init"
-echo "  2. Add remote: git remote add origin https://github.com/$owner/$reponame.git"
-echo "  3. Download dependencies: go mod download"
-echo "  4. Install git hooks: make install-hooks"
-echo "  5. Build and test: make build && make test"
-echo "  6. Customize internal/api/client.go for your API"
-echo "  7. Add your commands to internal/cli/cli.go"
+
+# Check if git was already initialized above
+if [ -d ".git" ]; then
+    echo "  1. Add remote: git remote add origin https://github.com/$owner/$reponame.git"
+else
+    echo "  1. Initialize git: git init"
+    echo "  2. Add remote: git remote add origin https://github.com/$owner/$reponame.git"
+fi
+
+echo "  - Download dependencies: go mod download"
+echo "  - Install git hooks: make install-hooks"
+echo "  - Build and test: make build && make test"
+echo "  - Customize internal/api/client.go for your API"
+echo "  - Add your commands to internal/cli/cli.go"
 echo ""
 echo -e "${YELLOW}Optional:${NC}"
 echo "  - Uncomment Homebrew section in .goreleaser.yml for tap releases"
