@@ -124,13 +124,37 @@ Files use these placeholders (replaced by `scripts/setup.sh`):
 
 ## Usage
 
-### Initial Setup
+### Option 1: GitHub "Use this template" Button (Recommended)
 
-1. Copy template to your project:
-   ```bash
-   cp -r go-cli-template my-new-cli
-   cd my-new-cli
-   ```
+1. Go to https://github.com/dl-alexandre/go-cli-template
+2. Click the green **"Use this template"** button
+3. Create your new repository
+4. Clone your new repo and run `./scripts/setup.sh`
+
+### Option 2: Clone and Setup
+
+If you clone the template directly, the setup script will detect the template's git history and offer to reset it:
+
+```bash
+git clone https://github.com/dl-alexandre/go-cli-template.git my-new-cli
+cd my-new-cli
+./scripts/setup.sh
+# Setup will ask: "Remove template git history now? (recommended) (Y/n):"
+# Select Y to run: rm -rf .git && git init
+```
+
+### After Setup
+
+```bash
+# Download dependencies
+go mod download
+
+# Install git hooks
+make install-hooks
+
+# Build and test
+make build && make test
+```
 
 2. Run setup script:
    ```bash
