@@ -49,3 +49,31 @@ jobs:
         test -x scripts/setup.sh || (echo "❌ setup.sh should be executable" && exit 1)
         test -x .githooks/pre-commit || (echo "❌ pre-commit hook should be executable" && exit 1)
         echo "✅ Scripts are executable"
+
+  cross-platform:
+    name: Cross-Platform Validation
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check template files (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        Write-Host "Checking template structure on Windows..."
+        if (!(Test-Path "go.mod")) { throw "❌ go.mod missing" }
+        if (!(Test-Path "Makefile")) { throw "❌ Makefile missing" }
+        if (!(Test-Path "README.md")) { throw "❌ README.md missing" }
+        Write-Host "✅ All required template files present"
+    
+    - name: Check template files (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        echo "Checking template structure on ${{ runner.os }}..."
+        test -f go.mod || (echo "❌ go.mod missing" && exit 1)
+        test -f Makefile || (echo "❌ Makefile missing" && exit 1)
+        test -f README.md || (echo "❌ README.md missing" && exit 1)
+        echo "✅ All required template files present on ${{ runner.os }}"
