@@ -6,6 +6,28 @@ Congratulations on creating a project from the Go CLI Template! This guide cover
 
 After running `./scripts/setup.sh`, verify everything works:
 
+### ⚠️ Critical: Update Module Path
+
+The template uses `github.com/dl-alexandre/go-cli-template` as its module path. You **must** change this to your own module path:
+
+```bash
+# Edit go.mod
+sed -i '' 's|github.com/dl-alexandre/go-cli-template|github.com/YOUR_USERNAME/YOUR_REPO|g' go.mod
+
+# Update all imports in Go files
+find . -name "*.go" -type f -exec sed -i '' 's|github.com/dl-alexandre/go-cli-template|github.com/YOUR_USERNAME/YOUR_REPO|g' {} \;
+
+# Tidy modules
+go mod tidy
+```
+
+Or manually:
+1. Open `go.mod` and change the module path
+2. Update all `import` statements in `cmd/`, `internal/` that reference the old path
+3. Run `go mod tidy`
+
+### Build and Test
+
 ```bash
 # 1. Build and test locally
 make dev
