@@ -1,11 +1,12 @@
-# Binaries
+# Binaries for programs and plugins
 bin/
 dist/
 *.exe
 *.dll
 *.so
 *.dylib
-{{APPNAME}}
+# Binary name after setup (not the template dir)
+/{{APPNAME}}
 
 # Test files
 *.test
