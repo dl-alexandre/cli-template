@@ -2,6 +2,11 @@
 
 {{DESCRIPTION}}
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/dl-alexandre/go-cli-template)](https://goreportcard.com/report/github.com/dl-alexandre/go-cli-template)
+[![Go Reference](https://pkg.go.dev/badge/github.com/dl-alexandre/go-cli-template.svg)](https://pkg.go.dev/github.com/dl-alexandre/go-cli-template)
+[![Release](https://img.shields.io/github/v/release/dl-alexandre/go-cli-template)](https://github.com/dl-alexandre/go-cli-template/releases)
+[![License](https://img.shields.io/github/license/dl-alexandre/go-cli-template)](LICENSE)
+
 ## Features
 
 - **Modern CLI Framework**: Built with [Kong](https://github.com/alecthomas/kong) for declarative, struct-based command definition
