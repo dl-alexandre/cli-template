@@ -41,7 +41,7 @@ type UpdateInfo struct {
 }
 
 const (
-	githubAPIURL = "https://api.github.com/repos/dl-alexandre/{{REPO_NAME}}/releases/latest"
+	githubAPIURL = "https://api.github.com/repos/dl-alexandre/cli-template/releases/latest"
 	cacheKey     = "update_check"
 	cacheTTL     = 24 * time.Hour // Check once per day
 )

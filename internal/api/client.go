@@ -57,7 +57,7 @@ func NewClient(opts ClientOptions) *Client {
 	client.SetBaseURL(opts.BaseURL)
 	client.SetTimeout(time.Duration(opts.Timeout) * time.Second)
 	client.SetHeader("Accept", "application/json")
-	client.SetHeader("User-Agent", "{{APPNAME}}/1.0.0")
+	client.SetHeader("User-Agent", "cli-template/1.0.0")
 
 	if opts.Debug {
 		client.SetDebug(true)

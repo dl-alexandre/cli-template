@@ -27,15 +27,15 @@ type CLI struct {
 
 // Globals contains global flags available to all commands
 type Globals struct {
-	ConfigFile string `help:"Config file path" short:"c" env:"{{APPNAME}}_CONFIG"`
-	APIURL     string `help:"API base URL" env:"{{APPNAME}}_API_URL"`
-	Timeout    int    `help:"Request timeout in seconds" default:"30" env:"{{APPNAME}}_TIMEOUT"`
-	NoCache    bool   `help:"Disable caching" env:"{{APPNAME}}_NO_CACHE"`
-	CacheDir   string `help:"Cache directory" env:"{{APPNAME}}_CACHE_DIR"`
-	CacheTTL   int    `help:"Cache TTL in minutes" default:"60" env:"{{APPNAME}}_CACHE_TTL"`
-	Verbose    bool   `help:"Enable verbose output" short:"v" env:"{{APPNAME}}_VERBOSE"`
-	Debug      bool   `help:"Enable debug output" env:"{{APPNAME}}_DEBUG"`
-	Format     string `help:"Output format: table, json, markdown" default:"table" enum:"table,json,markdown" env:"{{APPNAME}}_FORMAT"`
+	ConfigFile string `help:"Config file path" short:"c" env:"cli-template_CONFIG"`
+	APIURL     string `help:"API base URL" env:"cli-template_API_URL"`
+	Timeout    int    `help:"Request timeout in seconds" default:"30" env:"cli-template_TIMEOUT"`
+	NoCache    bool   `help:"Disable caching" env:"cli-template_NO_CACHE"`
+	CacheDir   string `help:"Cache directory" env:"cli-template_CACHE_DIR"`
+	CacheTTL   int    `help:"Cache TTL in minutes" default:"60" env:"cli-template_CACHE_TTL"`
+	Verbose    bool   `help:"Enable verbose output" short:"v" env:"cli-template_VERBOSE"`
+	Debug      bool   `help:"Enable debug output" env:"cli-template_DEBUG"`
+	Format     string `help:"Output format: table, json, markdown" default:"table" enum:"table,json,markdown" env:"cli-template_FORMAT"`
 
 	// Runtime dependencies (initialized by AfterApply)
 	Config *config.Config `kong:"-"`

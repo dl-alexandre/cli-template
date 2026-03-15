@@ -19,15 +19,15 @@ var (
 func main() {
 	// Set version info in cli package
 	cli.Version = version
-	cli.BinaryName = "{{APPNAME}}"
-	cli.GitHubRepo = "{{REPO_NAME}}"
+	cli.BinaryName = "cli-template"
+	cli.GitHubRepo = "cli-template"
 	cli.GitCommit = gitCommit
 	cli.BuildTime = buildTime
 
 	var c cli.CLI
 	ctx := kong.Parse(&c,
-		kong.Name("{{APPNAME}}"),
-		kong.Description("{{DESCRIPTION}}"),
+		kong.Name("cli-template"),
+		kong.Description("Production-ready Go CLI template with Kong, Viper, caching, and GoReleaser"),
 		kong.UsageOnError(),
 		kong.ConfigureHelp(kong.HelpOptions{
 			Compact: true,
@@ -38,7 +38,7 @@ func main() {
 	)
 
 	if ctx.Command() == "version" {
-		fmt.Printf("{{APPNAME}} %s (commit: %s) built %s\n", version, gitCommit, buildTime)
+		fmt.Printf("cli-template %s (commit: %s) built %s\n", version, gitCommit, buildTime)
 		os.Exit(0)
 	}
 

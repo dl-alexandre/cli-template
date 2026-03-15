@@ -74,7 +74,7 @@ func Load(flags Flags) (*Config, error) {
 	}
 
 	// Read environment variables
-	v.SetEnvPrefix("{{APPNAME}}")
+	v.SetEnvPrefix("cli-template")
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	v.AutomaticEnv()
 
@@ -127,7 +127,7 @@ func Load(flags Flags) (*Config, error) {
 func getConfigDir() string {
 	// Check XDG_CONFIG_HOME first
 	if xdgConfig := os.Getenv("XDG_CONFIG_HOME"); xdgConfig != "" {
-		return filepath.Join(xdgConfig, "{{APPNAME}}")
+		return filepath.Join(xdgConfig, "cli-template")
 	}
 
 	// Use OS-specific config directory
@@ -136,7 +136,7 @@ func getConfigDir() string {
 		home = "."
 	}
 
-	return filepath.Join(home, ".config", "{{APPNAME}}")
+	return filepath.Join(home, ".config", "cli-template")
 }
 
 // Save saves the configuration to the default config file
