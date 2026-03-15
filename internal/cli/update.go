@@ -59,8 +59,9 @@ func (c *UpdateCheckCmd) Run(globals *Globals) error {
 	// Try to get from cache first
 	if !c.Force && globals.Cache != nil {
 		if cached, ok := globals.Cache.Get(cacheKey); ok {
-			if info, valid := cached.(UpdateInfo); valid {
-				return c.displayUpdateInfo(printer, info)
+			var info UpdateInfo
+			if err := json.Unmarshal(cached, &info); err == nil {
+				return c.displayUpdateInfo(*printer, info)
 			}
 		}
 	}
@@ -73,10 +74,11 @@ func (c *UpdateCheckCmd) Run(globals *Globals) error {
 
 	// Cache the result
 	if globals.Cache != nil {
-		globals.Cache.Set(cacheKey, info, cacheTTL)
+		data, _ := json.Marshal(info)
+		globals.Cache.Set(cacheKey, data)
 	}
 
-	return c.displayUpdateInfo(printer, info)
+	return c.displayUpdateInfo(*printer, info)
 }
 
 // fetchLatestRelease queries GitHub API for the latest release
@@ -256,10 +258,6 @@ func AutoUpdateCheck(cache *cache.Cache) {
 	// Perform check in background
 	go func() {
 		cmd := &UpdateCheckCmd{}
-		// Use empty globals with minimal cache
-		globals := &Globals{
-			Cache: cache,
-		}
 
 		info, err := cmd.fetchLatestRelease(Version)
 		if err != nil {
@@ -268,7 +266,8 @@ func AutoUpdateCheck(cache *cache.Cache) {
 
 		// Cache the result
 		if cache != nil {
-			cache.Set(cacheKey, info, cacheTTL)
+			data, _ := json.Marshal(info)
+			cache.Set(cacheKey, data)
 		}
 
 		// Only print if update is available
