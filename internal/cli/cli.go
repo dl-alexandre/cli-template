@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/alecthomas/kong"
 	"github.com/dl-alexandre/cli-template/internal/api"
 	"github.com/dl-alexandre/cli-template/internal/cache"
 	"github.com/dl-alexandre/cli-template/internal/config"
@@ -178,7 +177,7 @@ type CompletionCmd struct {
 }
 
 // Run generates and prints the completion script
-func (c *CompletionCmd) Run(ctx *CLIContext) error {
+func (c *CompletionCmd) Run(globals *Globals) error {
 	// Kong doesn't export completion types directly, so we use the parser's completion
 	// For now, print a helpful message with manual installation instructions
 	switch c.Shell {

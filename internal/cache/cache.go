@@ -106,7 +106,14 @@ func (c *Cache) filePath(key string) string {
 	return filepath.Join(c.dir, key[:2], key)
 }
 
-// Stats returns cache statistics
+// DefaultCacheDir returns the default cache directory
+func DefaultCacheDir() string {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		home = "."
+	}
+	return filepath.Join(home, ".cache", "cli-template")
+}
 func (c *Cache) Stats() (total int, size int64, err error) {
 	err = filepath.Walk(c.dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {

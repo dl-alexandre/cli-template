@@ -1,5 +1,5 @@
-# Example configuration file for {{APPNAME}}
-# Copy this file to ~/.config/{{APPNAME}}/config.yaml and customize
+# Example configuration file for cli-template
+# Copy this file to ~/.config/cli-template/config.yaml and customize
 
 api:
   # Base URL for the API
@@ -15,7 +15,7 @@ cache:
   # Enable/disable caching
   enabled: true
   
-  # Cache directory (defaults to ~/.config/{{APPNAME}}/cache)
+  # Cache directory (defaults to ~/.config/cli-template/cache)
   # dir: "/path/to/custom/cache"
   
   # Cache TTL (in minutes)
