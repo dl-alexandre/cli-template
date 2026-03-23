@@ -8,6 +8,9 @@ dist/
 # Binary name after setup (not the template dir)
 /{{APPNAME}}
 
+# Template placeholder directories
+cmd/{{APPNAME}}/
+
 # Test files
 *.test
 *.out
