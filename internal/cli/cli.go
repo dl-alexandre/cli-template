@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/dl-alexandre/cli-tools/cache"
 	"github.com/dl-alexandre/cli-template/internal/api"
-	"github.com/dl-alexandre/cli-template/internal/cache"
 	"github.com/dl-alexandre/cli-template/internal/config"
 	"github.com/dl-alexandre/cli-template/internal/output"
 	"github.com/mattn/go-isatty"
@@ -38,7 +38,7 @@ type Globals struct {
 
 	// Runtime dependencies (initialized by AfterApply)
 	Config *config.Config `kong:"-"`
-	Cache  *cache.Cache   `kong:"-"`
+	Cache  cache.Cache     `kong:"-"`
 	Client *api.Client    `kong:"-"`
 }
 
