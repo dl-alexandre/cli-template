@@ -107,7 +107,7 @@ release:
     
     ### macOS/Linux (Homebrew)
     ```bash
-    brew tap dl-alexandre/cli-template
+    brew tap dl-alexandre/tap
     brew install cli-template
     ```
     
@@ -120,24 +120,24 @@ release:
     b3sum -c checksums.txt
     ```
 
-# brews:
-#   - name: cli-template
-#     repository:
-#       owner: dl-alexandre
-#       name: homebrew-tap
-#       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-#       branch: master
-#       pull_request:
-#         enabled: false
-#     commit_author:
-#       name: goreleaserbot
-#       email: bot@dl-alexandre.com
-#     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-#     directory: Formula
-#     description: "Production-ready Go CLI template"
-#     homepage: "https://github.com/dl-alexandre/cli-template"
-#     license: "MIT"
-#     skip_upload: "{{ if index .Env \"HOMEBREW_TAP_TOKEN\" }}false{{ else }}true{{ end }}"
+brews:
+  - name: cli-template
+    repository:
+      owner: dl-alexandre
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+      branch: master
+      pull_request:
+        enabled: false
+    commit_author:
+      name: goreleaserbot
+      email: bot@dl-alexandre.com
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+    directory: Formula
+    description: "Production-ready Go CLI template"
+    homepage: "https://github.com/dl-alexandre/cli-template"
+    license: "MIT"
+    skip_upload: "{{ if index .Env \"HOMEBREW_TAP_TOKEN\" }}false{{ else }}true{{ end }}"
 
 # flatpak:
 #   - app_id: net.ddns.dl-alexandre.CliTemplateCLI
