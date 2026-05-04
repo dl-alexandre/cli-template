@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/alecthomas/kong"
-	"github.com/dl-alexandre/cli-tools/cache"
 	"github.com/dl-alexandre/cli-template/internal/cli"
+	"github.com/dl-alexandre/cli-tools/cache"
 	cliver "github.com/dl-alexandre/cli-tools/version"
 )
 
