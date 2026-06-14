@@ -96,69 +96,51 @@ func (g *Globals) GetPrinter() *output.Printer {
 
 // ListCmd handles the list command
 type ListCmd struct {
-	Limit  int    `help:"Maximum number of results" default:"20"`
-	Offset int    `help:"Offset for pagination" default:"0"`
-	Format string `help:"Output format (overrides global)" enum:"table,json,markdown"`
+	Limit  int `help:"Maximum number of results" default:"20"`
+	Offset int `help:"Offset for pagination" default:"0"`
 }
 
 func (c *ListCmd) Run(globals *Globals) error {
-	format := c.Format
-	if format == "" {
-		format = globals.Format
-	}
-
 	ctx := context.Background()
 	items, err := globals.Client.List(ctx, c.Limit, c.Offset)
 	if err != nil {
 		return err
 	}
 
-	printer := output.NewPrinter(format, globals.ShouldUseColor())
+	printer := output.NewPrinter(globals.Format, globals.ShouldUseColor())
 	return printer.PrintItems(items)
 }
 
 // GetCmd handles the get command
 type GetCmd struct {
-	ID     string `arg:"" help:"Resource ID to retrieve"`
-	Format string `help:"Output format (overrides global)" enum:"table,json,markdown"`
+	ID string `arg:"" help:"Resource ID to retrieve"`
 }
 
 func (c *GetCmd) Run(globals *Globals) error {
-	format := c.Format
-	if format == "" {
-		format = globals.Format
-	}
-
 	ctx := context.Background()
 	item, err := globals.Client.Get(ctx, c.ID)
 	if err != nil {
 		return err
 	}
 
-	printer := output.NewPrinter(format, globals.ShouldUseColor())
+	printer := output.NewPrinter(globals.Format, globals.ShouldUseColor())
 	return printer.PrintItem(item)
 }
 
 // SearchCmd handles the search command
 type SearchCmd struct {
-	Query  string `arg:"" help:"Search query"`
-	Limit  int    `help:"Maximum number of results" default:"10"`
-	Format string `help:"Output format (overrides global)" enum:"table,json,markdown"`
+	Query string `arg:"" help:"Search query"`
+	Limit int    `help:"Maximum number of results" default:"10"`
 }
 
 func (c *SearchCmd) Run(globals *Globals) error {
-	format := c.Format
-	if format == "" {
-		format = globals.Format
-	}
-
 	ctx := context.Background()
 	items, err := globals.Client.Search(ctx, c.Query, c.Limit)
 	if err != nil {
 		return err
 	}
 
-	printer := output.NewPrinter(format, globals.ShouldUseColor())
+	printer := output.NewPrinter(globals.Format, globals.ShouldUseColor())
 	return printer.PrintItems(items)
 }
 

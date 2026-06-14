@@ -7,8 +7,7 @@ import (
 
 // UpdateCheckCmd wraps cli-tools update functionality
 type UpdateCheckCmd struct {
-	Force  bool   `help:"Force check, bypassing cache" flag:"force"`
-	Format string `help:"Output format" enum:"table,json,markdown" default:"table"`
+	Force bool `help:"Force check, bypassing cache" flag:"force"`
 }
 
 // Run executes the update check
@@ -25,7 +24,7 @@ func (c *UpdateCheckCmd) Run(globals *Globals) error {
 		return err
 	}
 
-	return update.DisplayUpdate(info, version.BinaryName, c.Format)
+	return update.DisplayUpdate(info, version.BinaryName, globals.Format)
 }
 
 // AutoUpdateCheck performs a background update check (for use at startup)

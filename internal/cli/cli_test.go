@@ -59,7 +59,6 @@ func TestListCmd_Validation(t *testing.T) {
 	cmd := &ListCmd{
 		Limit:  10,
 		Offset: 0,
-		Format: "json",
 	}
 
 	if cmd.Limit < 1 {
@@ -70,47 +69,23 @@ func TestListCmd_Validation(t *testing.T) {
 		t.Error("offset should not be negative")
 	}
 
-	validFormats := []string{"table", "json", "markdown"}
-	found := false
-	for _, f := range validFormats {
-		if f == cmd.Format {
-			found = true
-			break
-		}
-	}
-	if !found {
-		t.Errorf("format %s is not valid", cmd.Format)
-	}
 }
 
 func TestGetCmd_Validation(t *testing.T) {
 	cmd := &GetCmd{
-		ID:     "test-id",
-		Format: "json",
+		ID: "test-id",
 	}
 
 	if cmd.ID == "" {
 		t.Error("ID should not be empty")
 	}
 
-	validFormats := []string{"table", "json", "markdown"}
-	found := false
-	for _, f := range validFormats {
-		if f == cmd.Format {
-			found = true
-			break
-		}
-	}
-	if !found {
-		t.Errorf("format %s is not valid", cmd.Format)
-	}
 }
 
 func TestSearchCmd_Validation(t *testing.T) {
 	cmd := &SearchCmd{
-		Query:  "test query",
-		Limit:  5,
-		Format: "table",
+		Query: "test query",
+		Limit: 5,
 	}
 
 	if cmd.Query == "" {
