@@ -146,8 +146,11 @@ To make your module discoverable:
 
 Your project already has Dependabot configured (`.github/dependabot.yml`). It will:
 - Check for Go module updates weekly
-- Check for GitHub Actions updates monthly
+- Check for GitHub Actions updates weekly
 - Create PRs automatically
+- Group only low-risk patch updates; generated Google SDK and `modernc.org` updates stay isolated for review
+- Enable safe patch auto-merge only after the required CI checks pass
+- Label and summarize failed Dependabot updates with `needs-manual-fix`
 
 ## Next Steps
 
