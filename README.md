@@ -141,6 +141,10 @@ make lint
 make check
 ```
 
+### API contract and drift checks
+
+For CLIs that wrap a published API, keep an upstream contract snapshot and test both directions: check that expected operations and important response fields still exist upstream, and test that your client sends the intended method, path, parameters, headers, and body. The [API drift guide](docs/API_DRIFT.md) describes a reusable CI workflow based on the fleet's discovery-document comparison and API test-double patterns.
+
 ### Available Make Targets
 
 ```
